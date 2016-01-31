@@ -27,9 +27,6 @@ struct CRegExpMatch {
 class CRegExpImpl;
 
 class CRegExp {
- private:
-  CRegExpImpl *impl_;
-
  public:
   CRegExp(const std::string &pattern="");
   CRegExp(const CRegExp &regexp);
@@ -68,6 +65,9 @@ class CRegExp {
   static bool find(const std::string &pattern, const std::string &str);
 
   static std::string replace(const std::string &pattern, const std::string &str, bool global=false);
+
+ private:
+  CRegExpImpl *impl_;
 };
 
 namespace CRegExpUtil {
