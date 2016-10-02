@@ -452,7 +452,7 @@ find(const std::string &str) const
 
   if (is_regex_) {
 #if defined(BOOST_REGEX)
-    if (regmatch_ == NULL) {
+    if (! regmatch_) {
       th->num_regmatch_ = 100;
 
       th->regmatch_ = new regmatch_t [num_regmatch_];
@@ -474,7 +474,7 @@ find(const std::string &str) const
     else
       rc = 0;
 #elif defined(TRE_REGEX)
-    if (regmatch_ == NULL) {
+    if (! regmatch_) {
       th->num_regmatch_ = 100;
 
       th->regmatch_ = new regmatch_t [num_regmatch_];
@@ -496,7 +496,7 @@ find(const std::string &str) const
     else
       rc = 0;
 #else
-    if (regmatch_ == NULL) {
+    if (! regmatch_) {
       th->num_regmatch_ = 100;
 
       th->regmatch_ = new regexp::regmatch_t [num_regmatch_];
@@ -624,9 +624,9 @@ bool
 CRegExpImpl::
 getMatchRange(int pos, int *start, int *end) const
 {
-  int pos1 = 1;
+  int pos1 = 0;
 
-  for (int i = 1; i < num_regmatch_; ++i) {
+  for (int i = 0; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       continue;
 
@@ -647,7 +647,7 @@ void
 CRegExpImpl::
 getMatches(std::vector<CRegExpMatch> &matches) const
 {
-  for (int i = 1; i < num_regmatch_; ++i) {
+  for (int i = 0; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       continue;
 
@@ -661,7 +661,7 @@ getNumMatches() const
 {
   int num = 0;
 
-  for (int i = 1; i < num_regmatch_; ++i) {
+  for (int i = 0; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       break;
 
@@ -677,13 +677,12 @@ getMatchString(int pos) const
 {
   int num = 0;
 
-  for (int i = 1; i < num_regmatch_; ++i) {
+  for (int i = 0; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       break;
 
     if (num == pos)
-      return str_.substr(regmatch_[i].rm_so,
-                         regmatch_[i].rm_eo - regmatch_[i].rm_so);
+      return str_.substr(regmatch_[i].rm_so, regmatch_[i].rm_eo - regmatch_[i].rm_so);
 
     ++num;
   }
