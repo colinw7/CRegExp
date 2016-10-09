@@ -50,13 +50,13 @@ class CRegExp {
 
   bool getMatchRange(int *start, int *end) const;
 
-  bool getMatchRange(int pos, int *start, int *end) const;
+  bool getSubMatchRange(int pos, int *start, int *end) const;
 
-  void getMatches(std::vector<CRegExpMatch> &matches) const;
-  void getMatches(std::vector<std::string> &matches) const;
+  void getSubMatches(std::vector<CRegExpMatch> &matches) const;
+  void getSubMatches(std::vector<std::string> &matches) const;
 
-  int         getNumMatches() const;
-  std::string getMatchString(int i) const;
+  int         getNumSubMatches() const;
+  std::string getSubMatchString(int i) const;
 
   bool isValid() const;
 

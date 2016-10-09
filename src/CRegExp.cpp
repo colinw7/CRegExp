@@ -38,12 +38,12 @@ class CRegExpImpl {
 
   bool getMatchRange(int *start, int *end) const;
 
-  bool getMatchRange(int pos, int *start, int *end) const;
+  bool getSubMatchRange(int pos, int *start, int *end) const;
 
-  void getMatches(std::vector<CRegExpMatch> &matches) const;
+  void getSubMatches(std::vector<CRegExpMatch> &matches) const;
 
-  int         getNumMatches() const;
-  std::string getMatchString(int i) const;
+  int         getNumSubMatches() const;
+  std::string getSubMatchString(int i) const;
 
   bool isValid() const;
 
@@ -176,42 +176,42 @@ getMatchRange(int *start, int *end) const
 
 bool
 CRegExp::
-getMatchRange(int pos, int *start, int *end) const
+getSubMatchRange(int pos, int *start, int *end) const
 {
-  return impl_->getMatchRange(pos, start, end);
+  return impl_->getSubMatchRange(pos, start, end);
 }
 
 void
 CRegExp::
-getMatches(std::vector<CRegExpMatch> &matches) const
+getSubMatches(std::vector<CRegExpMatch> &matches) const
 {
-  return impl_->getMatches(matches);
+  return impl_->getSubMatches(matches);
 }
 
 void
 CRegExp::
-getMatches(std::vector<std::string> &matches) const
+getSubMatches(std::vector<std::string> &matches) const
 {
-  int num = getNumMatches();
+  int num = getNumSubMatches();
 
   matches.clear();
 
   for (int i = 0; i < num; ++i)
-    matches.push_back(getMatchString(i));
+    matches.push_back(getSubMatchString(i));
 }
 
 int
 CRegExp::
-getNumMatches() const
+getNumSubMatches() const
 {
-  return impl_->getNumMatches();
+  return impl_->getNumSubMatches();
 }
 
 std::string
 CRegExp::
-getMatchString(int pos) const
+getSubMatchString(int pos) const
 {
-  return impl_->getMatchString(pos);
+  return impl_->getSubMatchString(pos);
 }
 
 bool
@@ -463,8 +463,7 @@ find(const std::string &str) const
     if (! match_bol_) flags |= REG_NOTBOL;
     if (! match_eol_) flags |= REG_NOTEOL;
 
-    int error = regexecA(&regex_, str_.c_str(), num_regmatch_,
-                         regmatch_, flags);
+    int error = regexecA(&regex_, str_.c_str(), num_regmatch_, regmatch_, flags);
 
     if (error != 0) {
       th->setError(error);
@@ -485,8 +484,7 @@ find(const std::string &str) const
     if (! match_bol_) flags |= REG_NOTBOL;
     if (! match_eol_) flags |= REG_NOTEOL;
 
-    int error = regexec(&regex_, str_.c_str(), num_regmatch_,
-                        regmatch_, flags);
+    int error = regexec(&regex_, str_.c_str(), num_regmatch_, regmatch_, flags);
 
     if (error != 0) {
       th->setError(error);
@@ -507,8 +505,7 @@ find(const std::string &str) const
     if (! match_bol_) flags |= REG_NOTBOL;
     if (! match_eol_) flags |= REG_NOTEOL;
 
-    int error = regexp::regexec(&regex_, str_.c_str(), num_regmatch_,
-                                regmatch_, flags);
+    int error = regexp::regexec(&regex_, str_.c_str(), num_regmatch_, regmatch_, flags);
 
     if (error != 0) {
       th->setError(error);
@@ -535,8 +532,7 @@ replace(const std::string &str, bool global) const
 {
 #if 0
   {
-  cerr << "Range(0):" << regmatch_[0].rm_so << ":" <<
-          regmatch_[0].rm_eo << endl;
+  cerr << "Range(0):" << regmatch_[0].rm_so << ":" << regmatch_[0].rm_eo << endl;
 
   int pos = 1;
 
@@ -572,7 +568,7 @@ replace(const std::string &str, bool global) const
           num = num*10 + str[pos] - '0';
         }
 
-        res += getMatchString(num - 1);
+        res += getSubMatchString(num - 1);
       }
       else
         res += str[pos];
@@ -622,11 +618,11 @@ getMatchRange(int *start, int *end) const
 
 bool
 CRegExpImpl::
-getMatchRange(int pos, int *start, int *end) const
+getSubMatchRange(int pos, int *start, int *end) const
 {
   int pos1 = 0;
 
-  for (int i = 0; i < num_regmatch_; ++i) {
+  for (int i = 1; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       continue;
 
@@ -645,9 +641,9 @@ getMatchRange(int pos, int *start, int *end) const
 
 void
 CRegExpImpl::
-getMatches(std::vector<CRegExpMatch> &matches) const
+getSubMatches(std::vector<CRegExpMatch> &matches) const
 {
-  for (int i = 0; i < num_regmatch_; ++i) {
+  for (int i = 1; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       continue;
 
@@ -657,11 +653,11 @@ getMatches(std::vector<CRegExpMatch> &matches) const
 
 int
 CRegExpImpl::
-getNumMatches() const
+getNumSubMatches() const
 {
   int num = 0;
 
-  for (int i = 0; i < num_regmatch_; ++i) {
+  for (int i = 1; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       break;
 
@@ -673,11 +669,11 @@ getNumMatches() const
 
 std::string
 CRegExpImpl::
-getMatchString(int pos) const
+getSubMatchString(int pos) const
 {
   int num = 0;
 
-  for (int i = 0; i < num_regmatch_; ++i) {
+  for (int i = 1; i < num_regmatch_; ++i) {
     if (regmatch_[i].rm_so == -1)
       break;
 
@@ -767,7 +763,7 @@ parse(const std::string &str, const CRegExp &regexp, std::vector<std::string> &m
   if (! regexp.find(str))
     return false;
 
-  regexp.getMatches(match_strs);
+  regexp.getSubMatches(match_strs);
 
   return true;
 }
