@@ -37,7 +37,9 @@ class CRegExp {
   void setPattern(const std::string &pattern);
   const std::string &getPattern() const;
 
+  bool isCaseSensitive() const;
   void setCaseSensitive(bool flag);
+
   void setExtended(bool flag);
   void setMatchBOL(bool flag);
   void setMatchEOL(bool flag);

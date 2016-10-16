@@ -23,7 +23,9 @@ class CRegExpImpl {
 
   void setPattern(const std::string &pattern);
 
+  bool isCaseSensitive() const;
   void setCaseSensitive(bool flag);
+
   void setExtended(bool flag);
   void setMatchBOL(bool flag);
   void setMatchEOL(bool flag);
@@ -109,6 +111,13 @@ CRegExp::
 setPattern(const std::string &pattern)
 {
   impl_->setPattern(pattern);
+}
+
+bool
+CRegExp::
+isCaseSensitive() const
+{
+  return impl_->isCaseSensitive();
 }
 
 void
@@ -336,6 +345,13 @@ setPattern(const std::string &pattern)
 {
   pattern_  = pattern;
   compiled_ = false;
+}
+
+bool
+CRegExpImpl::
+isCaseSensitive() const
+{
+  return case_sensitive_;
 }
 
 void
