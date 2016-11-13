@@ -268,13 +268,13 @@ CRegExpImpl(const std::string &pattern) :
  is_regex_      (false)
 {
 #if defined(BOOST_REGEX)
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #elif defined(TRE_REGEX)
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #else
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #endif
 }
@@ -290,13 +290,13 @@ CRegExpImpl(const CRegExpImpl &regexp) :
  is_regex_      (regexp.is_regex_)
 {
 #if defined(BOOST_REGEX)
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #elif defined(TRE_REGEX)
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #else
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #endif
 }
@@ -314,13 +314,13 @@ operator=(const CRegExpImpl &regexp)
   is_regex_       = regexp.is_regex_;
 
 #if defined(BOOST_REGEX)
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #elif defined(TRE_REGEX)
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #else
-  regmatch_     = NULL;
+  regmatch_     = nullptr;
   num_regmatch_ = 0;
 #endif
 

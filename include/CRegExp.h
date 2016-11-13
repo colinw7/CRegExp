@@ -69,8 +69,10 @@ class CRegExp {
   static std::string replace(const std::string &pattern, const std::string &str, bool global=false);
 
  private:
-  CRegExpImpl *impl_;
+  CRegExpImpl *impl_ { nullptr };
 };
+
+//------
 
 namespace CRegExpUtil {
   bool parse(const std::string &str, const std::string &pattern);
