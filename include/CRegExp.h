@@ -28,11 +28,11 @@ class CRegExpImpl;
 
 class CRegExp {
  public:
-  CRegExp(const std::string &pattern="");
+  explicit CRegExp(const std::string &pattern="");
   CRegExp(const CRegExp &regexp);
  ~CRegExp();
 
-  const CRegExp &operator=(const CRegExp &regexp);
+  CRegExp &operator=(const CRegExp &regexp);
 
   void setPattern(const std::string &pattern);
   const std::string &getPattern() const;

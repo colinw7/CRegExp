@@ -91,7 +91,7 @@ CRegExp(const CRegExp &regexp)
   impl_ = new CRegExpImpl(*regexp.impl_);
 }
 
-const CRegExp &
+CRegExp &
 CRegExp::
 operator=(const CRegExp &regexp)
 {
