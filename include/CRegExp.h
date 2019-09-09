@@ -16,8 +16,8 @@
 #define RE_OCTAL  "[0-7]"
 
 struct CRegExpMatch {
-  int start;
-  int end;
+  int start { 0 };
+  int end   { 0 };
 
   CRegExpMatch(int start, int end) :
    start(start), end(end) {

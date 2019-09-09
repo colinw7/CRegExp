@@ -59,23 +59,23 @@ class CRegExpImpl {
  private:
 #if defined(BOOST_REGEX)
   boost::regex_tA     regex_;
-  regmatch_t         *regmatch_;
+  regmatch_t         *regmatch_       { nullptr };
 #elif defined(TRE_REGEX)
   regex_t             regex_;
-  regmatch_t         *regmatch_;
+  regmatch_t         *regmatch_       { nullptr };
 #else
   regexp::regex_t     regex_;
-  regexp::regmatch_t *regmatch_;
+  regexp::regmatch_t *regmatch_       { nullptr };
 #endif
-  int                 num_regmatch_;
+  int                 num_regmatch_   { 0 };
   std::string         pattern_;
   std::string         str_;
-  bool                case_sensitive_;
-  bool                extended_;
-  bool                match_bol_;
-  bool                match_eol_;
-  bool                compiled_;
-  bool                is_regex_;
+  bool                case_sensitive_ { true };
+  bool                extended_       { false };
+  bool                match_bol_      { true };
+  bool                match_eol_      { true };
+  bool                is_regex_       { false };
+  bool                compiled_       { false };
   std::string         error_msg_;
 };
 
@@ -259,24 +259,8 @@ replace(const std::string &pattern, const std::string &str, bool global)
 
 CRegExpImpl::
 CRegExpImpl(const std::string &pattern) :
- pattern_       (pattern),
- case_sensitive_(true),
- extended_      (false),
- match_bol_     (true),
- match_eol_     (true),
- compiled_      (false),
- is_regex_      (false)
+ pattern_(pattern)
 {
-#if defined(BOOST_REGEX)
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
-#elif defined(TRE_REGEX)
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
-#else
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
-#endif
 }
 
 CRegExpImpl::
@@ -286,43 +270,39 @@ CRegExpImpl(const CRegExpImpl &regexp) :
  extended_      (regexp.extended_),
  match_bol_     (regexp.match_bol_),
  match_eol_     (regexp.match_eol_),
- compiled_      (false),
  is_regex_      (regexp.is_regex_)
 {
-#if defined(BOOST_REGEX)
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
-#elif defined(TRE_REGEX)
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
-#else
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
-#endif
 }
 
 const CRegExpImpl &
 CRegExpImpl::
 operator=(const CRegExpImpl &regexp)
 {
+#if defined(BOOST_REGEX)
+  delete [] regmatch_;
+#elif defined(TRE_REGEX)
+  delete [] regmatch_;
+#else
+  delete [] regmatch_;
+#endif
+
   pattern_        = regexp.pattern_;
   case_sensitive_ = regexp.case_sensitive_;
   extended_       = regexp.extended_;
   match_bol_      = regexp.match_bol_;
   match_eol_      = regexp.match_eol_;
-  compiled_       = false;
   is_regex_       = regexp.is_regex_;
+  compiled_       = false;
 
 #if defined(BOOST_REGEX)
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
+  regmatch_ = nullptr;
 #elif defined(TRE_REGEX)
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
+  regmatch_ = nullptr;
 #else
-  regmatch_     = nullptr;
-  num_regmatch_ = 0;
+  regmatch_ = nullptr;
 #endif
+
+  num_regmatch_ = 0;
 
   return *this;
 }
