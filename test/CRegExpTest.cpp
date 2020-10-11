@@ -84,7 +84,7 @@ main(int argc, char **argv)
     std::vector<std::string>::const_iterator p1 = strs.begin();
     std::vector<std::string>::const_iterator p2 = strs.end  ();
 
-    std::string replace = *p1;
+    std::string replace1 = *p1;
 
     ++p1;
 
@@ -92,7 +92,7 @@ main(int argc, char **argv)
       if (regexp.find(*p1)) {
         std::cout << *p1 << " Match";
 
-        std::cout << regexp.replace(replace) << std::endl;
+        std::cout << regexp.replace(replace1) << std::endl;
       }
       else
         std::cout << *p1 << " No Match" << std::endl;
