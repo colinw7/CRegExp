@@ -19,7 +19,7 @@ class CRegExpImpl {
   CRegExpImpl(const CRegExpImpl &regexp);
  ~CRegExpImpl();
 
-  const CRegExpImpl &operator=(const CRegExpImpl &regexp);
+  CRegExpImpl &operator=(const CRegExpImpl &regexp);
 
   void setPattern(const std::string &pattern);
 
@@ -274,7 +274,7 @@ CRegExpImpl(const CRegExpImpl &regexp) :
 {
 }
 
-const CRegExpImpl &
+CRegExpImpl &
 CRegExpImpl::
 operator=(const CRegExpImpl &regexp)
 {
