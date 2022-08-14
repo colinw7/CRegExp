@@ -472,7 +472,7 @@ find(const std::string &str) const
     if (! regmatch_) {
       th->num_regmatch_ = 100;
 
-      th->regmatch_ = new regmatch_t [num_regmatch_];
+      th->regmatch_ = new regmatch_t [uint(num_regmatch_)];
     }
 
     int flags = 0;
@@ -544,10 +544,10 @@ replace(const std::string &str, bool global) const
   }
 #endif
 
-  std::string lhs = str_.substr(0, regmatch_[0].rm_so);
-  std::string rhs = str_.substr(regmatch_[0].rm_eo);
+  std::string lhs = str_.substr(0, uint(regmatch_[0].rm_so));
+  std::string rhs = str_.substr(uint(regmatch_[0].rm_eo));
 
-  uint len = str.size();
+  uint len = uint(str.size());
 
   std::string res = lhs;
 
@@ -596,7 +596,7 @@ isMatchAll() const
   if (! getMatchRange(&start, &end))
     return false;
 
-  return (start == 0 && end == (int) str_.size() - 1);
+  return (start == 0 && end == int(str_.size()) - 1);
 }
 
 bool
@@ -674,7 +674,7 @@ getSubMatchString(int pos) const
       break;
 
     if (num == pos)
-      return str_.substr(regmatch_[i].rm_so, regmatch_[i].rm_eo - regmatch_[i].rm_so);
+      return str_.substr(uint(regmatch_[i].rm_so), uint(regmatch_[i].rm_eo - regmatch_[i].rm_so));
 
     ++num;
   }
@@ -783,11 +783,11 @@ gregsub(const std::string &istr, const CRegExp &pattern, const std::string &rstr
       return false;
 
     if (spos > 0)
-      ostr += istr1.substr(0, spos);
+      ostr += istr1.substr(0, uint(spos));
 
     std::string rstr1;
 
-    uint rlen = rstr.size();
+    uint rlen = uint(rstr.size());
 
     for (uint i = 0; i < rlen; ++i) {
       if      (rstr[i] == '\\') {
@@ -797,14 +797,14 @@ gregsub(const std::string &istr, const CRegExp &pattern, const std::string &rstr
           rstr1 += rstr[i];
       }
       else if (rstr[i] == '&')
-        rstr1 += istr1.substr(spos, epos - spos + 1);
+        rstr1 += istr1.substr(uint(spos), uint(epos - spos + 1));
       else
         rstr1 += rstr[i];
     }
 
     ostr += rstr1;
 
-    istr1 = istr1.substr(epos + 1);
+    istr1 = istr1.substr(uint(epos + 1));
   }
 
   ostr += istr1;
@@ -825,11 +825,11 @@ regsub(const std::string &istr, const CRegExp &pattern, const std::string &rstr,
     return false;
 
   if (spos > 0)
-    ostr += istr.substr(0, spos);
+    ostr += istr.substr(0, uint(spos));
 
   std::string rstr1;
 
-  uint rlen = rstr.size();
+  uint rlen = uint(rstr.size());
 
   for (uint i = 0; i < rlen; ++i) {
     if      (rstr[i] == '\\') {
@@ -839,14 +839,14 @@ regsub(const std::string &istr, const CRegExp &pattern, const std::string &rstr,
         rstr1 += rstr[i];
     }
     else if (rstr[i] == '&')
-      rstr1 += istr.substr(spos, epos - spos + 1);
+      rstr1 += istr.substr(uint(spos), uint(epos - spos + 1));
     else
       rstr1 += rstr[i];
   }
 
   ostr += rstr1;
 
-  ostr += istr.substr(epos + 1);
+  ostr += istr.substr(uint(epos + 1));
 
   return true;
 }
