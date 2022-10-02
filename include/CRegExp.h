@@ -19,8 +19,8 @@ struct CRegExpMatch {
   int start { 0 };
   int end   { 0 };
 
-  CRegExpMatch(int start, int end) :
-   start(start), end(end) {
+  CRegExpMatch(int start1, int end1) :
+   start(start1), end(end1) {
   }
 };
 
