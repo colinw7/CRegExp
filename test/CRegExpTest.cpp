@@ -66,7 +66,7 @@ main(int argc, char **argv)
 
         regexp.getSubMatches(matches);
 
-        int num = matches.size();
+        int num = int(matches.size());
 
         for (int n = 0; n < num; ++n)
           std::cout << " " << matches[n];
